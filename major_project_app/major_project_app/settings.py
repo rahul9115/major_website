@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'meter_app'
+    'meter_app',
+    'apis',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -51,7 +53,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'major_project_app.urls'
-
+REST_FRAMEWORK={
+    "DEFAULT_PERMISSION_CLASSES":[
+        'rest_framework.permissions.AllowAny',
+    ]
+}
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
