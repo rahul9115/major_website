@@ -25,7 +25,11 @@ SECRET_KEY = 'r$xecl86$g@4o3cyv0tmx=7xe2bf9!8w+(#j**6l6@y8_0%k^a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    
+    "10.0.2.2",
+    "127.0.0.1"
+]
 
 
 # Application definition
@@ -39,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'meter_app',
     'apis',
-    'rest_framework'
+    'rest_framework',
+    'opencv'
 ]
 
 MIDDLEWARE = [
@@ -125,3 +130,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
