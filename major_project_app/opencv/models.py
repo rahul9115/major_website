@@ -4,6 +4,7 @@ import numpy as np
 from io import BytesIO
 from django.core.files.base import ContentFile
 from .utils import get_filtered_image
+import cv2
 # Create your models here.
 ACTION_CHOICES=(
     ('NO_FILTER','no filter'),
@@ -23,7 +24,9 @@ class Upload(models.Model):
         return str(self.id)
 
     def save(self,*args,**kwargs):
+        
         img=Image.open(self.image)
+        
         cv_img=np.array(img)
         img=get_filtered_image(cv_img,self.action)
         im_pil=Image.fromarray(img)
