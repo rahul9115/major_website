@@ -27,11 +27,11 @@ class Upload(models.Model):
         
         img=Image.open(self.image)
         
-        cv_img=np.array(img)
-        img=get_filtered_image(cv_img,self.action)
-        im_pil=Image.fromarray(img)
+        img1=get_filtered_image(img,self.action)
+        
+        
         buffer=BytesIO()
-        im_pil.save(buffer,format="png")
+        img.save(buffer,format="png")
         image_png=buffer.getvalue()
         self.image.save(str(self.image),ContentFile(image_png),save=False)
         super().save(*args,**kwargs)

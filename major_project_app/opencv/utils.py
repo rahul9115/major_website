@@ -3,11 +3,49 @@ import matplotlib.pyplot as plt
 import easyocr
 import cv2 as cv
 import matplotlib.pyplot as plt
+import csv
+import boto3
+import os
+import base64
+import pandas as pd
+from django.contrib.staticfiles import finders
+from PIL import Image
+import numpy as np
+def encode_image(image):
+  image_content = image.read()
+  return base64.b64encode(image_content)
 def get_filtered_image(image,action):
+    
     print("This is image array",image)
-    open_cv_image=image[:,:,::-1].copy()
+   
+    
+    os.environ["AWS_DEFAULT_REGION"]='us-west-2'
+    workpath = os.path.dirname(os.path.abspath(__file__))
+    c = open(os.path.join(workpath, 'new_user_credentials.csv'), 'r')
+    next(c)
+    reader=csv.reader(c)
+    
     
 
+    print("This is csv",reader)
+    for line in reader:
+        aws_key_id=line[2]
+        secret_access_key=line[3]
+        print("AWS_KEY",aws_key_id,"AWS SECRET key",secret_access_key)
+    client=boto3.client("rekognition",aws_access_key_id=aws_key_id,aws_secret_access_key=secret_access_key)
+    
+    
+    image.save(os.path.join(workpath, 'image.png'))
+    with open(os.path.join(workpath, 'image.png'),"rb") as image:
+        source_bytes=image.read()
+    response=client.detect_text(Image={"Bytes":source_bytes})
+    for i in response['TextDetections']:
+        for j,k in i.items():
+            if(j=="DetectedText"):
+                if(len(k)>=5  and k.isdigit()==True):
+                    print(k)   
+
+    """
     reader=easyocr.Reader(['en'])
     
     
@@ -90,7 +128,7 @@ def get_filtered_image(image,action):
     image_crop()
     with open('data.txt', 'a') as f:
         f.write(str(final_digits))    
-        
+    """    
 
     
     if action=='NO_FILTER':
