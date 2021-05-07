@@ -11,11 +11,50 @@ import pandas as pd
 from django.contrib.staticfiles import finders
 from PIL import Image
 import numpy as np
-def encode_image(image):
-  image_content = image.read()
-  return base64.b64encode(image_content)
-def get_filtered_image(image,action):
+import requests
+import json
+url = "https://vision.googleapis.com/v1/images:annotate"
+workpath=os.path.dirname(os.path.abspath(__file__))
+c=open(os.path.join(workpath,"api_key.txt"),"r")
+api_key=c.read()
+querystring={"key":api_key}
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read())
+def image_request(image_path):
     
+    payload = '{  \"requests\":[    {      \"image\":{        \"content\":\"'+encode_image(image_path).decode("utf-8")+'"      },      \"features\":[        {          \"type\":\"TEXT_DETECTION\" }      ]    }  ]}'
+    response = requests.request("POST", url, data=payload, params=querystring)
+
+    return response.text  
+def get_filtered_image(image,action):
+    image.save(os.path.join(workpath, 'image.jpeg'))
+    value=image_request(os.path.join(workpath,"image.jpeg"))
+    
+    with open(os.path.join(workpath,"value.txt"),"w") as file:
+        file.write(value)
+    with open(os.path.join(workpath,"value.txt"),"r") as file:
+        read=json.loads(file.read()) 
+    value=read.get("responses")
+    value1=dict(value[0])
+    text_annot=value1["textAnnotations"]
+    value2=dict(text_annot[0])
+    description=value2["description"]
+    k=0
+    str1=""
+    flag=False
+    for i in description:
+        print(i)
+        if(i=='r'):
+            flag=True
+        if(i.isdigit() and k<=8 and flag==True):
+            str1=str1+i
+            k+=1
+        if(i=="m"):
+            flag=False   
+    print(str1)        
+    
+    """
     print("This is image array",image)
    
     
@@ -43,7 +82,8 @@ def get_filtered_image(image,action):
         for j,k in i.items():
             if(j=="DetectedText"):
                 if(len(k)>=5  and k.isdigit()==True):
-                    print(k)   
+                    print(k)  
+    """                 
 
     """
     reader=easyocr.Reader(['en'])
