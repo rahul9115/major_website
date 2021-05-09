@@ -13,6 +13,10 @@ from PIL import Image
 import numpy as np
 import requests
 import json
+import sqlalchemy
+from sqlalchemy import create_engine
+engine=sqlalchemy.create_engine("postgresql://bgnnchtclsosex:13f25d52cbda8621b0ecee9dea4bfa691e9022a98f134c4a96e2658d62711d1a@ec2-107-22-83-3.compute-1.amazonaws.com:5432/d2phjkie6l3btf")
+db=engine.connect()
 url = "https://vision.googleapis.com/v1/images:annotate"
 workpath=os.path.dirname(os.path.abspath(__file__))
 c=open(os.path.join(workpath,"api_key.txt"),"r")
@@ -53,7 +57,14 @@ def get_filtered_image(image,action):
         if(i=="m"):
             flag=False   
     print(str1)        
-    
+    customer_no="01222345"
+    meter_reading=int(str1)
+    date1=date.today()
+    timestamp=int(datetime.timestamp(datetime.now()))
+    timestamp= datetime.fromtimestamp(timestamp)
+    db.execute("insert into"+" meter_readings("+'"consumer_no",'+'"meter_reading",'+'"date",'+'"timestamp"'+") "+f"values('{customer_no}',{meter_reading},'{date1}','{timestamp}')")
+
+
     """
     print("This is image array",image)
    
