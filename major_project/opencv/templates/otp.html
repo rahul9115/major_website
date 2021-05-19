@@ -1,0 +1,32 @@
+{% load static %}
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Autofocus Field</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/otp.css'%}">
+</head>
+<body>
+    <form action="." method="POST">
+
+	<div class="container">
+		{% csrf_token %}
+        <h1>ENTER OTP</h1>
+        <h1 style="color:red">{{message}}</h1>
+		<div class="userInput">
+			<input type="text" required name="first" id='ist' maxlength="1" onkeyup="clickEvent(this,'sec')">
+			<input type="text" required name="second" id="sec" maxlength="1" onkeyup="clickEvent(this,'third')">
+			<input type="text" required name="third" id="third" maxlength="1" onkeyup="clickEvent(this,'fourth')">
+			<input type="text" required name="fourth" id="fourth" maxlength="1" onkeyup="clickEvent(this,'fifth')">
+			<input type="text" required name="fifth" id="fifth" maxlength="1">
+		</div>
+        
+		<input style="margin-left: 590px;margin-top: 100px;padding:10px; width:200px;" type=submit  value="Confirm"/>
+    
+	</div>
+</form>
+    <script src="{% static 'js/otp.js' %}"></script>
+</body>
+<script></script>
+</html>
