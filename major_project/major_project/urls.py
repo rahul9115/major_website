@@ -22,9 +22,10 @@ from opencv import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.first),
-    path('uploads/', views.home),
+    path('uploads/', views.home,name="uploads"),
     path("otp/",views.second),
     path(f"{settings.MEDIA_URL}",admin.site.urls),
+    path("logout/",views.logout1,name="logout")
     
     
     
